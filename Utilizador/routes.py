@@ -74,7 +74,7 @@ def login():
     response = {'message:': 'Autenticação incorreta.'}
     return make_response(jsonify(response), 401)
 
-@utilizador.route('/logout', methods=['POST'])
+@utilizador_blueprint.route('/logout', methods=['POST'])
 def logout():
     if current_user.is_authenticated():
         logout_user()
@@ -96,7 +96,7 @@ def get_Utilizador_Atual():
         return jsonify({'message':'Utilizador não conectado'}),401
 
 
-56
+
 
 
 
