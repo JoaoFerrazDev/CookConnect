@@ -9,7 +9,7 @@ import os
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'I_ngYcYBFSa7U-7_aXkH-g'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-file_path = os.path.abspath(os.path.join(os.getcwd(), r'C:\Users\jferr\Desktop\Arquiteturas de software\CookConnectV2\Utilizador\database\utilizador.db'))
+file_path = os.path.abspath(os.path.join(os.getcwd(), r'database/utilizador.db'))
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + file_path
 models.init_app(app)
 app.register_blueprint(utilizador_blueprint)

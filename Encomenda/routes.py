@@ -1,12 +1,9 @@
-import smtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
-
-import mail
 from flask import Blueprint, jsonify, request, current_app
 from models import Encomenda, EncomendaLinha, db
+from flask import Flask
 import requests
 
+app = Flask(__name__)
 encomenda_blueprint = Blueprint('encomenda_api_routes', __name__, url_prefix='/api/encomenda')
 app.config['INVENTORY_SERVICE_URL'] = 'http://127.0.0.1:5005/api/inventory'
 
@@ -133,15 +130,6 @@ def checkout():
         shipping_response = requests.post(shipping_service_url, json=shipping_data)
         if shipping_response.status_code != 201:
             return jsonify({'message': 'Failed to create shipment.'}), 500
-
-        # Send email
-        email_data = {
-            "destinatario": utilizador['email'],
-            "assunto": "Order Confirmation",
-            "mensagem": f"Your order {encomenda_pendente.id} has been placed successfully."
-        }
-        resultado = enviar_email(email_data)
-        print(resultado)
 
         return jsonify({'result': encomenda_pendente.serializar()})
     else:
