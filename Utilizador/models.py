@@ -3,8 +3,10 @@ from flask_login import UserMixin
 from werkzeug.security import generate_password_hash
 from datetime import datetime, timezone
 
+"""
+'I_ngYcYBFSa7U-7_aXkH-g'
+"""
 db = SQLAlchemy()
-
 
 def init_app(app):
     db.app = app
@@ -19,23 +21,19 @@ class Utilizador(db.Model, UserMixin):
     api_key = db.Column(db.String(255), unique=True, nullable=True)
     ativo = db.Column(db.Boolean, default=True)
     autenticado = db.Column(db.Boolean, default=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
 
+    def __repr__(self):
+        return f'<utilizador {self.id}, {self.nomeUtilizador}>'
 
-def __repr__(self):
-    return f'<utilizador {self.id}, {self.nomeUtilizador}>'
-
-
-def serializar(self):
-    return {
-        'id' : self.id,
-        'nomeUtilizador': self.nomeUtilizador,
-        'administrador': self.administrador,
-        'api_key': self.api_key,
-        'ativo': self.ativo
-    }
-
-
-def update_api_key(self):
-    self.api_key = generate_password_hash(self.nomeUtilizador + str(datetime.now(timezone.utc)))
-
-
+    def serializar(self):
+        return {
+            'id': self.id,
+            'nomeUtilizador': self.nomeUtilizador,
+            'administrador': self.administrador,
+            'api_key': self.api_key,
+            'ativo': self.ativo,
+            'email': self.email,
+        }
+    def update_api_key(self):
+        self.api_key = generate_password_hash(self.nomeUtilizador + str(datetime.now(timezone.utc)))
