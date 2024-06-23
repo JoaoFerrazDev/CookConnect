@@ -9,6 +9,7 @@ app.config['SECRET_KEY'] = 'hQwAvEIT-uEz0xaigHxx8g'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 file_path = os.path.abspath(os.path.join(os.getcwd(), r'database/artigo.db'))
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///'+file_path
+app.config['INVENTORY_SERVICE_URL'] = 'http://127.0.0.1:5005/api/inventory'
 app.register_blueprint(artigo_blueprint)
 init_app(app)
 

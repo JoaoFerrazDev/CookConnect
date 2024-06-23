@@ -3,7 +3,7 @@ from models import Inventory, db
 
 inventory_blueprint = Blueprint('inventory_api', __name__, url_prefix='/api/inventory')
 
-@inventory_blueprint.route('/check/<int:product_id>', methods=['GET'])
+@inventory_blueprint.route('/check/<product_id>', methods=['GET'])
 def check_stock(product_id):
     inventory_item = Inventory.query.filter_by(product_id=product_id).first()
     if inventory_item:
@@ -13,9 +13,9 @@ def check_stock(product_id):
 
 @inventory_blueprint.route('/update', methods=['POST'])
 def update_stock():
-    data = request.get_json()
-    product_id = data.get('product_id')
-    stock_quantity = data.get('stock_quantity')
+
+    product_id = request.form['product_id']
+    stock_quantity = request.form['stock_quantity']
 
     inventory_item = Inventory.query.filter_by(product_id=product_id).first()
     if inventory_item:

@@ -7,6 +7,7 @@ import os
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'I_ngYcYBFSa7U-7_aXkH-g'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['INVENTORY_SERVICE_URL'] = 'http://127.0.0.1:5005/api/inventory'
 file_path = os.path.abspath(os.path.join(os.getcwd(), r'database/encomenda.db'))
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + file_path
 app.config['SHIPPING_SERVICE_URL'] = 'http://127.0.0.1:5004'  # Shipping Service URL

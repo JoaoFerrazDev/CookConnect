@@ -3,9 +3,7 @@ from models import Encomenda, EncomendaLinha, db
 from flask import Flask
 import requests
 
-app = Flask(__name__)
 encomenda_blueprint = Blueprint('encomenda_api_routes', __name__, url_prefix='/api/encomenda')
-app.config['INVENTORY_SERVICE_URL'] = 'http://127.0.0.1:5005/api/inventory'
 
 UTILIZADOR_API_URL = 'http://127.0.0.1:5001/api/utilizador'
 
@@ -96,6 +94,7 @@ def adicionar_item_encomenda():
 @encomenda_blueprint.route('/checkout/', methods=['POST'])
 def checkout():
     api_key = request.headers.get('Authorization')
+    morada = request.form['morada']
     if not api_key:
         return jsonify({'message': 'Não está autenticado.'}), 401
     response = get_utilizador(api_key)
@@ -118,13 +117,15 @@ def checkout():
                 return jsonify({'message': 'Failed to reduce stock.'}), 500
 
         encomenda_pendente.aberta = False
+        encomenda_pendente.morada = morada
+        encomenda_pendente.tracking_number = "TRK" + str(encomenda_pendente.id)
         db.session.add(encomenda_pendente)
         db.session.commit()
 
         shipping_data = {
             "order_id": encomenda_pendente.id,
             "tracking_number": "TRK" + str(encomenda_pendente.id),
-            "shipping_address": utilizador['address']  # Assuming the address is in the user data
+            "shipping_address": morada
         }
         shipping_service_url = current_app.config['SHIPPING_SERVICE_URL'] + '/create'
         shipping_response = requests.post(shipping_service_url, json=shipping_data)
@@ -149,6 +150,3 @@ def historico_encomendas():
     result = [encomenda.serializar() for encomenda in encomendas]
     return jsonify(result), 200
 
-
-if __name__ == '__main__':
-    app.run(debug=True)

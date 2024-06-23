@@ -12,13 +12,17 @@ class Encomenda(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     utilizadorId = db.Column(db.Integer)
     aberta = db.Column(db.Boolean, default=False)
+    morada = db.Column(db.String(255), nullable=True)
+    tracking_number = db.Column(db.String(21), unique=True, nullable=True)
     linhas_encomenda = db.relationship('EncomendaLinha', backref='linhaEncomenda')
 
     def serializar(self):
         return {
             'utilizadorId': self.utilizadorId,
             'aberta': self.aberta,
-            'linhas_encomenda': [x.serializar() for x in self.linhas_encomenda]
+            'linhas_encomenda': [x.serializar() for x in self.linhas_encomenda],
+            'tracking_number': self.tracking_number,
+            'morada': self.morada
         }
 
 

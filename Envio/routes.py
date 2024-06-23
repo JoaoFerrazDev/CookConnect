@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from models import db, Shipment
 
-shipping_blueprint = Blueprint('shipping', __name__)
+shipping_blueprint = Blueprint('shipping', __name__, url_prefix='/api/shipping')
 
 
 @shipping_blueprint.route('/create', methods=['POST'])
@@ -27,7 +27,7 @@ def create_shipment():
     return jsonify({"message": "Shipment created", "shipment": new_shipment.id}), 201
 
 
-@shipping_blueprint.route('/update/<int:id>', methods=['PUT'])
+@shipping_blueprint.route('/update/<int:id>', methods=['POST'])
 def update_shipment(id):
     shipment = Shipment.query.get_or_404(id)
     data = request.get_json()
@@ -36,7 +36,7 @@ def update_shipment(id):
 
     db.session.commit()
 
-    return jsonify({"message": "Shipment updated", "shipment": shipment.id}), 200
+    return jsonify({"message": "Shipment updated", "shipment": shipment.id, "Status": shipment.status}), 200
 
 
 @shipping_blueprint.route('/<int:id>', methods=['GET'])
